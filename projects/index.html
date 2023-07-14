@@ -3,78 +3,59 @@
 
 <head>
     <title>tapir2342</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/style.css">
 </head>
 
-<body class="w-100 sans-serif bg-white">
-    <section class="pa3 pa4-m pa5-l">
-        <a class="f3 link hover-light-red no-underline black dib ph2 pv1" href="/">hi</a>
-        <a class="f3 link hover-light-red no-underline black dib ph2 pv1" href="/blog">blog</a>
-        <a class="b f3 link no-underline black dib ph2 pv1">projects</a>
-        <a class="f3 link hover-light-red no-underline black dib ph2 pv1" href="/music">music</a>
-        <a class="f3 link hover-light-red no-underline black dib ph2 pv1" href="/design">design</a>
-    </section>
+<body>
+    <ol id="nav">
+        <li><a href="/">hi</a></li>
+        <li><a href="/blog">blog</a></li>
+        <li><b>projects</b></li>
+        <li><a href="/music">music</a></li>
+    </ol>
 
-    <article class="pa3 pa5-ns">
-        <h1 class="f-headline-l mv3">Projects</h1>
-        <h2 class="f5 f4-m f3-l fw2 black-50 mt0 lh-copy">
-            Things I make
-        </h2>
-        <p class="w-90 f6 f4-ns lh-copy measure">
+    <div>
+        <h1>Projects</h1>
+        <p>
             hi. Here are some of the projects from which some I have actually finished! This page will mostly contain
             devlogs though.
             Most of the projects here are either games, visualizations or procedurally generated designs.
             You can find everything else I make on my <a href="#">GitHub profile</a>.
         </p>
-    </article>
+        </article>
 
-    <div data-name="component">
-        <section class="cf w-100 pa2-ns mw9">
-            <article class="fl w-100 w-50-m w-25-ns pa2-ns">
-                <div class="aspect-ratio aspect-ratio--1x1">
-                    <a href="/projects/ultramassive/index.html" class="ph2 ph0-ns pb3 link db">
-                        <img src="/projects/ultramassive/banner.png" class="db bg-center cover aspect-ratio--object">
-                    </a>
-                </div>
-                <h3 class="f5 f4-ns mb0 black-90">ULTRAMASSIVE</h3>
-                <h3 class="f6 f5 fw4 mt2 black-60">Rogue-like deckbuilder game</h3>
-            </article>
-            <article class="fl w-100 w-50-m w-25-ns pa2-ns">
-                <div class="aspect-ratio aspect-ratio--1x1">
-                    <a href="/projects/taptaprevolution.html" class="ph2 ph0-ns pb3 link db">
-                        <img src="/images/0014.jpg" style="object-fit: cover;" class="aspect-ratio--object">
-                    </a>
-                </div>
-                <a href="#" class="ph2 ph0-ns pb3 link db">
-                    <h3 class="f5 f4-ns mb0 black-90">Tap Tap Revolution</h3>
-                    <h3 class="f6 f5 fw4 mt2 black-60">Rhythm game built in Godot</h3>
-                </a>
-            </article>
-            <article class="fl w-100 w-50-m w-25-ns pa2-ns">
-                <div class="aspect-ratio aspect-ratio--1x1">
-                    <a href="/projects/trees.html" class="ph2 ph0-ns pb3 link db">
-                        <img src="/images/baum.png" style="object-fit: cover;" class="aspect-ratio--object">
-                    </a>
-                </div>
-                <a href="#" class="ph2 ph0-ns pb3 link db">
-                    <h3 class="f5 f4-ns mb0 black-90">Bäume</h3>
-                    <h3 class="f6 f5 fw4 mt2 black-60">Trees using L-Systems</h3>
-                </a>
-            </article>
-            <article class="fl w-100 w-50-m w-25-ns pa2-ns">
-                <div class="aspect-ratio aspect-ratio--1x1">
-                    <a href="/projects/lifetimes.html" class="ph2 ph0-ns pb3 link db">
-                        <img src="/images/0003.jpg" style="object-fit: cover;" class="aspect-ratio--object">
-                    </a>
-                </div>
-                <a href="#" class="ph2 ph0-ns pb3 link db">
-                    <h3 class="f5 f4-ns mb0 black-90">Lifetimes</h3>
-                    <h3 class="f6 f5 fw4 mt2 black-60">Subtitle of piece</h3>
-                </a>
-            </article>
-        </section>
-    </div>
+        <div class="project">
+            <a href="/projects/ultramassive/index.html">
+                <h2>ULTRAMASSIVE</h2>
+                <h3>Rogue-like deckbuilding game</h3>
+                <img src="/projects/ultramassive/banner.png">
+            </a>
+        </div>
+
+        <div class="project">
+            <a href="/projects/taptaprevolution.html">
+                <h2>Tap-Tap Revolution</h2>
+                <h3>Rhythm game built in Godot</h3>
+                <img src="/images/0014.jpg">
+            </a>
+        </div>
+
+        <div class="project">
+            <a href="/projects/trees.html">
+                <h2>Bäume</h2>
+                <h3>Drawing Trees using L-Systems</h3>
+                <img src="/images/baum.png">
+            </a>
+        </div>
+
+        <div class="project">
+            <a href="/projects/lifetimes.html">
+                <h2>Lifetimes</h2>
+                <h3>Subtitle of piece</h3>
+                <img src="/images/0003.jpg">
+            </a>
+        </div>
 </body>
 
 </html>
