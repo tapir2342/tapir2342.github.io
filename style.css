@@ -438,6 +438,7 @@ pre {
             color: grey;
             text-transform: uppercase;
             font-size: 0.8em;
+            font-weight: bold;
         }
 
         .book img {
@@ -484,17 +485,25 @@ pre {
             margin-top: 42px;
         }
 
-        ol,ul {
-            margin: 0;
-            padding: 0;
-        }
 
-        li {
+        .nonumbers li {
             list-style-type: none;
             margin-bottom: 0.5em;
         }
 
+        li {
+            margin-top: 9.18px;
+        }
+
+        ol#nav {
+            margin: 0;
+            padding: 0;
+        }
+
         ol#nav li {
+            display: inline;
+            list-style-type: none;
+            margin-bottom: 0.5em;
             margin-left: 0px;
             margin-right: 13px;
         }
