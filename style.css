@@ -1,525 +1,126 @@
-/* Document
- * ========================================================================== */
+*,::before,::after{box-sizing:border-box;background-repeat:no-repeat}::before,::after{text-decoration:inherit;vertical-align:inherit}:where(:root){cursor:default;line-height:1.5;overflow-wrap:break-word;-moz-tab-size:4;tab-size:4;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}:where(body){margin:0}:where(h1){font-size:2em;margin:.67em 0}:where(dl,ol,ul) :where(dl,ol,ul){margin:0}:where(hr){color:inherit;height:0}:where(nav) :where(ol,ul){list-style-type:none;padding:0}:where(nav li)::before{content:"\200B";float:left}:where(pre){font-family:monospace,monospace;font-size:1em;overflow:auto}:where(abbr[title]){text-decoration:underline;text-decoration:underline dotted}:where(b,strong){font-weight:bolder}:where(code,kbd,samp){font-family:monospace,monospace;font-size:1em}:where(small){font-size:80%}:where(audio,canvas,iframe,img,svg,video){vertical-align:middle}:where(iframe){border-style:none}:where(svg:not([fill])){fill:currentColor}:where(table){border-collapse:collapse;border-color:inherit;text-indent:0}:where(button,input,select){margin:0}:where(button,[type="button" i],[type="reset" i],[type="submit" i]){-webkit-appearance:button}:where(fieldset){border:1px solid #a0a0a0}:where(progress){vertical-align:baseline}:where(textarea){margin:0;resize:vertical}:where([type="search" i]){-webkit-appearance:textfield;outline-offset:-2px}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}::-webkit-input-placeholder{color:inherit;opacity:.54}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}:where(dialog){background-color:white;border:solid;color:black;height:-moz-fit-content;height:fit-content;left:0;margin:auto;padding:1em;position:absolute;right:0;width:-moz-fit-content;width:fit-content}:where(dialog:not([open])){display:none}:where(details>summary:first-of-type){display:list-item}:where([aria-busy="true" i]){cursor:progress}:where([aria-controls]){cursor:pointer}:where([aria-disabled="true" i],[disabled]){cursor:not-allowed}:where([aria-hidden="false" i][hidden]){display:initial}:where([aria-hidden="false" i][hidden]:not(:focus)){clip:rect(0,0,0,0);position:absolute}html{font-family:system-ui,-apple-system,"Segoe UI","Roboto","Ubuntu","Cantarell","Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"}code,kbd,samp,pre{font-family:ui-monospace,"Menlo","Consolas","Roboto Mono","Ubuntu Monospace","Noto Mono","Oxygen Mono","Liberation Mono",monospace,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"}
 
-/**
- * 1. Add border box sizing in all browsers (opinionated).
- * 2. Backgrounds do not repeat by default (opinionated).
- */
-
-*,
-::before,
-::after {
-  box-sizing: border-box; /* 1 */
-  background-repeat: no-repeat; /* 2 */
+@media (prefers-color-scheme: light) {
+    :root {
+        --body-background-color: #f2f2f2;
+        --body-text-color: #0b0b0b;
+        --link-color: #2D82B7;
+        --subtitle-color: grey;
+        --project-background-color: #ededed;
+        --project-link-color #0b0b0b;
+        --project-h3-color: #888;
+    }
 }
 
-/**
- * 1. Add text decoration inheritance in all browsers (opinionated).
- * 2. Add vertical alignment inheritance in all browsers (opinionated).
- */
-
-::before,
-::after {
-  text-decoration: inherit; /* 1 */
-  vertical-align: inherit; /* 2 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --body-background-color: #0b0b0b;
+        --body-text-color: #f2f2f2;
+        --link-color: #2D82B7;
+        --subtitle-color: grey;
+        --project-background-color: #222;
+        --project-link-color #0b0b0b;
+        --project-h3-color: #888;
+    }
 }
 
-/**
- * 1. Use the default cursor in all browsers (opinionated).
- * 2. Change the line height in all browsers (opinionated).
- * 3. Breaks words to prevent overflow in all browsers (opinionated).
- * 4. Use a 4-space tab width in all browsers (opinionated).
- * 5. Remove the grey highlight on links in iOS (opinionated).
- * 6. Prevent adjustments of font size after orientation changes in iOS.
- */
-
-:where(:root) {
-  cursor: default; /* 1 */
-  line-height: 1.5; /* 2 */
-  overflow-wrap: break-word; /* 3 */
-  -moz-tab-size: 4; /* 4 */
-  tab-size: 4; /* 4 */
-  -webkit-tap-highlight-color: transparent; /* 5 */
-  -webkit-text-size-adjust: 100%; /* 6 */
+body {
+    color: var(--body-text-color);
+    background-color: var(--body-background-color);
+    max-width: 800px;
+    margin: 4em;
 }
 
-/* Sections
- * ========================================================================== */
-
-/**
- * Remove the margin in all browsers (opinionated).
- */
-
-:where(body) {
-  margin: 0;
+a {
+    color: var(--link-color);
+    text-decoration: none;
 }
 
-/**
- * Correct the font size and margin on `h1` elements within `section` and
- * `article` contexts in Chrome, Edge, Firefox, and Safari.
- */
-
-:where(h1) {
-  font-size: 2em;
-  margin: 0.67em 0;
+a:hover {
+    text-decoration: underline;
 }
 
-/* Grouping content
- * ========================================================================== */
-
-/**
- * Remove the margin on nested lists in Chrome, Edge, and Safari.
- */
-
-:where(dl, ol, ul) :where(dl, ol, ul) {
-  margin: 0;
+a:visited {
+    color: var(--link-color);
+    text-decoration: none;
 }
 
-/**
- * 1. Correct the inheritance of border color in Firefox.
- * 2. Add the correct box sizing in Firefox.
- */
-
-:where(hr) {
-  color: inherit; /* 1 */
-  height: 0; /* 2 */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block
 }
 
-/**
- * Remove the list style on navigation lists in all browsers (opinionated).
- */
-
-:where(nav) :where(ol, ul) {
-  list-style-type: none;
-  padding: 0;
+h1 {
+    font-family: sans-serif;
+    font-size: 2.342em;
 }
 
-/**
- * Prevent VoiceOver from ignoring list semantics in Safari (opinionated).
- */
-
-:where(nav li)::before {
-  content: "\200B";
-  float: left;
+.subtitle {
+    color: var(--subtitle-color);
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: bold;
 }
 
-/**
- * 1. Correct the inheritance and scaling of font size in all browsers.
- * 2. Correct the odd `em` font sizing in all browsers.
- * 3. Prevent overflow of the container in all browsers (opinionated).
- */
-
-:where(pre) {
-  font-family: monospace, monospace; /* 1 */
-  font-size: 1em; /* 2 */
-  overflow: auto; /* 3 */
+.book img {
+    width: 234.2px;
+    margin-bottom: 69px;
 }
 
-/* Text-level semantics
- * ========================================================================== */
-
-/**
- * Add the correct text decoration in Safari.
- */
-
-:where(abbr[title]) {
-  text-decoration: underline;
-  text-decoration: underline dotted;
+.project {
+    background-color: var(--project-background-color);
+    margin: 23.42px 23.42px 23.42px 0px;
+    display: inline-block;
+    padding: 23px;
+    border-radius: 13px;
 }
 
-/**
- * Add the correct font weight in Chrome, Edge, and Safari.
- */
-
-:where(b, strong) {
-  font-weight: bolder;
+.project a {
+    color: var(--project-link-color);
+    text-decoration: none;
 }
 
-/**
- * 1. Correct the inheritance and scaling of font size in all browsers.
- * 2. Correct the odd `em` font sizing in all browsers.
- */
-
-:where(code, kbd, samp) {
-  font-family: monospace, monospace; /* 1 */
-  font-size: 1em; /* 2 */
+.project h2 {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-/**
- * Add the correct font size in all browsers.
- */
-
-:where(small) {
-  font-size: 80%;
+.project h3 {
+    color: var(--project-h3-color);
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: 420;
+    margin-top: 0;
 }
 
-/* Embedded content
- * ========================================================================== */
-
-/*
- * Change the alignment on media elements in all browsers (opinionated).
- */
-
-:where(audio, canvas, iframe, img, svg, video) {
-  vertical-align: middle;
+.project img {
+    width: 234.2px;
 }
 
-/**
- * Remove the border on iframes in all browsers (opinionated).
- */
-
-:where(iframe) {
-  border-style: none;
+.nonumbers li {
+    list-style-type: none;
+    margin-bottom: 0.5em;
 }
 
-/**
- * Change the fill color to match the text color in all browsers (opinionated).
- */
-
-:where(svg:not([fill])) {
-  fill: currentColor;
+li {
+    margin-top: 9.18px;
 }
 
-/* Tabular data
- * ========================================================================== */
-
-/**
- * 1. Collapse border spacing in all browsers (opinionated).
- * 2. Correct table border color inheritance in all Chrome, Edge, and Safari.
- * 3. Remove text indentation from table contents in Chrome, Edge, and Safari.
- */
-
-:where(table) {
-  border-collapse: collapse; /* 1 */
-  border-color: inherit; /* 2 */
-  text-indent: 0; /* 3 */
+ol#nav {
+    margin: 0;
+    padding: 0;
 }
 
-/* Forms
- * ========================================================================== */
-
-/**
- * Remove the margin on controls in Safari.
- */
-
-:where(button, input, select) {
-  margin: 0;
+ol#nav li {
+    display: inline;
+    list-style-type: none;
+    margin-bottom: 0.5em;
+    margin-left: 0px;
+    margin-right: 13px;
 }
 
-/**
- * Correct the inability to style buttons in iOS and Safari.
- */
-
-:where(button, [type="button" i], [type="reset" i], [type="submit" i]) {
-  -webkit-appearance: button;
+ul#other-places li {
+    margin-left: 0px;
+    margin-right: 13px;
 }
-
-/**
- * Change the inconsistent appearance in all browsers (opinionated).
- */
-
-:where(fieldset) {
-  border: 1px solid #a0a0a0;
-}
-
-/**
- * Add the correct vertical alignment in Chrome, Edge, and Firefox.
- */
-
-:where(progress) {
-  vertical-align: baseline;
-}
-
-/**
- * 1. Remove the margin in Firefox and Safari.
- * 3. Change the resize direction in all browsers (opinionated).
- */
-
-:where(textarea) {
-  margin: 0; /* 1 */
-  resize: vertical; /* 3 */
-}
-
-/**
- * 1. Correct the odd appearance in Chrome, Edge, and Safari.
- * 2. Correct the outline style in Safari.
- */
-
-:where([type="search" i]) {
-  -webkit-appearance: textfield; /* 1 */
-  outline-offset: -2px; /* 2 */
-}
-
-/**
- * Correct the cursor style of increment and decrement buttons in Safari.
- */
-
-::-webkit-inner-spin-button,
-::-webkit-outer-spin-button {
-  height: auto;
-}
-
-/**
- * Correct the text style of placeholders in Chrome, Edge, and Safari.
- */
-
-::-webkit-input-placeholder {
-  color: inherit;
-  opacity: 0.54;
-}
-
-/**
- * Remove the inner padding in Chrome, Edge, and Safari on macOS.
- */
-
-::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-
-/**
- * 1. Correct the inability to style upload buttons in iOS and Safari.
- * 2. Change font properties to `inherit` in Safari.
- */
-
-::-webkit-file-upload-button {
-  -webkit-appearance: button; /* 1 */
-  font: inherit; /* 2 */
-}
-
-/* Interactive
- * ========================================================================== */
-
-/*
- * Add the correct styles in Safari.
- */
-
-:where(dialog) {
-  background-color: white;
-  border: solid;
-  color: black;
-  height: -moz-fit-content;
-  height: fit-content;
-  left: 0;
-  margin: auto;
-  padding: 1em;
-  position: absolute;
-  right: 0;
-  width: -moz-fit-content;
-  width: fit-content;
-}
-
-:where(dialog:not([open])) {
-  display: none;
-}
-
-/*
- * Add the correct display in Safari.
- */
-
-:where(details > summary:first-of-type) {
-  display: list-item;
-}
-
-/* Accessibility
- * ========================================================================== */
-
-/**
- * Change the cursor on busy elements in all browsers (opinionated).
- */
-
-:where([aria-busy="true" i]) {
-  cursor: progress;
-}
-
-/*
- * Change the cursor on control elements in all browsers (opinionated).
- */
-
-:where([aria-controls]) {
-  cursor: pointer;
-}
-
-/*
- * Change the cursor on disabled, not-editable, or otherwise
- * inoperable elements in all browsers (opinionated).
- */
-
-:where([aria-disabled="true" i], [disabled]) {
-  cursor: not-allowed;
-}
-
-/*
- * Change the display on visually hidden accessible elements
- * in all browsers (opinionated).
- */
-
-:where([aria-hidden="false" i][hidden]) {
-  display: initial;
-}
-
-:where([aria-hidden="false" i][hidden]:not(:focus)) {
-  clip: rect(0, 0, 0, 0);
-  position: absolute;
-}
-
-/**
- * Use the default user interface font in all browsers (opinionated).
- */
-
-html {
-  font-family:
-    system-ui,
-    /* macOS 10.11-10.12 */ -apple-system,
-    /* Windows 6+ */ "Segoe UI",
-    /* Android 4+ */ "Roboto",
-    /* Ubuntu 10.10+ */ "Ubuntu",
-    /* Gnome 3+ */ "Cantarell",
-    /* KDE Plasma 5+ */ "Noto Sans",
-    /* fallback */ sans-serif,
-    /* macOS emoji */ "Apple Color Emoji",
-    /* Windows emoji */ "Segoe UI Emoji",
-    /* Windows emoji */ "Segoe UI Symbol",
-    /* Linux emoji */ "Noto Color Emoji";
-}
-
-/**
- * Use the default monospace user interface font in all browsers (opinionated).
- */
-
-code,
-kbd,
-samp,
-pre {
-  font-family:
-    ui-monospace,
-    /* macOS 10.10+ */ "Menlo",
-    /* Windows 6+ */ "Consolas",
-    /* Android 4+ */ "Roboto Mono",
-    /* Ubuntu 10.10+ */ "Ubuntu Monospace",
-    /* KDE Plasma 5+ */ "Noto Mono",
-    /* KDE Plasma 4+ */ "Oxygen Mono",
-    /* Linux/OpenOffice fallback */ "Liberation Mono",
-    /* fallback */ monospace,
-    /* macOS emoji */ "Apple Color Emoji",
-    /* Windows emoji */ "Segoe UI Emoji",
-    /* Windows emoji */ "Segoe UI Symbol",
-    /* Linux emoji */ "Noto Color Emoji";
-}
-
-/* My stuff */
-
-        body {
-            max-width: 800px;
-            margin: 4em;
-        }
-
-        a{
-            text-decoration: none;
-            color: #9FC131;
-        }
-
-        a:visited {
-            text-decoration: none;
-            color: #005C53;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block
-        }
-
-        h1 {
-            font-family: sans-serif;
-            font-size: 2.342em;
-        }
-
-        .subtitle {
-            color: grey;
-            text-transform: uppercase;
-            font-size: 0.8em;
-            font-weight: bold;
-        }
-
-        .book img {
-            width: 234.2px;
-            margin-bottom: 69px;
-        }
-
-        span [class="date"] {
-            color:red;
-        }
-
-        .project {
-            margin: 23.42px 23.42px 23.42px 0px;
-            display: inline-block;
-            background-color: #f7f7f7;
-            padding: 23px;
-            border-radius: 13px;
-        }
-
-        .project a {
-            color: #0b0b0b;
-            text-decoration: none;
-        }
-
-        .project h2 {
-            margin-top: 0;
-            margin-bottom: 0;
-        }
-
-        .project h3 {
-            color: #888;
-            text-transform: uppercase;
-            font-size: 0.8em;
-            font-weight: 420;
-            margin-top: 0;
-        }
-
-        .project img {
-            width: 234.2px;
-        }
-
-        hr {
-            border: 1px solid #edebec;
-            margin-top: 42px;
-        }
-
-
-        .nonumbers li {
-            list-style-type: none;
-            margin-bottom: 0.5em;
-        }
-
-        li {
-            margin-top: 9.18px;
-        }
-
-        ol#nav {
-            margin: 0;
-            padding: 0;
-        }
-
-        ol#nav li {
-            display: inline;
-            list-style-type: none;
-            margin-bottom: 0.5em;
-            margin-left: 0px;
-            margin-right: 13px;
-        }
-
-        ul#other-places li {
-            margin-left: 0px;
-            margin-right: 13px;
-        }
-
-        #visitors {
-            margin-top: 23.42px;
-        }
-
-        #visitors span {
-            background-color: #0b0b0b;
-            color: #f2f2f2;
-            padding: 3px;
-            margin-right: 1px;
-        }
