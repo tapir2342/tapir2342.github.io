@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Music Setup</title>
+<style>
+  :root {
+    --bg: #14161a; --panel: #1c1f26; --ink: #e7e9ee; --muted: #9aa3b2;
+    --audio: #3a7de8; --midi: #e8833a; --line: #2c313b; --accent: #4ad29a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 22px 80px; }
+  h1 { font-size: 30px; margin: 0 0 4px; }
+  h2 { font-size: 21px; margin: 40px 0 12px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+  h3 { font-size: 16px; margin: 22px 0 6px; color: var(--accent); }
+  .panel h3:first-child { margin-top: 0; }
+  svg.arr { display: inline; margin: 0; background: none; border: 0; border-radius: 0; width: 0.95em; height: 0.72em; vertical-align: baseline; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  p, li { color: var(--ink); }
+  .sub { color: var(--muted); margin-top: 0; }
+  code { background: #0e1014; padding: 1px 6px; border-radius: 4px; font-size: 14px; color: #cfe3ff; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px; margin: 14px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14.5px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .legend { display: flex; gap: 22px; flex-wrap: wrap; font-size: 14px; color: var(--muted); margin: 6px 0 0; }
+  .swatch { display: inline-block; width: 26px; height: 0; border-top-width: 3px; border-top-style: solid; vertical-align: middle; margin-right: 7px; }
+  .key-audio { border-color: var(--audio); }
+  .key-midi { border-color: var(--midi); border-top-style: dashed; }
+  .key-tap { border-color: var(--audio); border-top-style: dashed; }
+  svg { width: 100%; height: auto; display: block; margin: 8px 0; background: #0e1014; border: 1px solid var(--line); border-radius: 10px; }
+  .badge { display: inline-block; font-size: 12px; color: var(--bg); background: var(--accent); border-radius: 5px; padding: 1px 7px; font-weight: 700; vertical-align: middle; }
+  ul { margin: 6px 0; padding-left: 22px; }
+  li { margin: 4px 0; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 680px) { .two { grid-template-columns: 1fr; } }
+  table.cmp td:first-child { white-space: nowrap; font-weight: 600; }
+  @media (max-width: 600px) { table.cmp td:first-child { white-space: normal; } }
+  dl.defs { display: grid; grid-template-columns: max-content 1fr; gap: 10px 22px; margin: 16px 0; }
+  dl.defs dt { font-weight: 700; color: var(--accent); }
+  dl.defs dd { margin: 0; }
+  @media (max-width: 560px) { dl.defs { grid-template-columns: 1fr; gap: 2px; } dl.defs dd { margin: 0 0 12px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Music Setup</h1>
+  <p>Two things stay wired and never move:
+    the <strong>L8</strong> is the permanent audio hub (always hear it, always record stems) and the
+    <strong>Audio4c</strong> is the permanent MIDI matrix (it picks who's the clock master and keeps working with the laptop off).
+    Changing modes = recalling a stored Audio4c scene or moving one patch cable — never rewiring the rig.</p>
+
+  <div id="mapModes"></div>
+  <div id="mapControls"></div>
+  <svg id="map" viewBox="0 0 1680 900" role="img" aria-label="Interactive device map"></svg>
+  <p class="sub">The patchbay is shown from the <strong>rear</strong> (24 on the left, 1 on the right). Each column has <strong>two jacks</strong>: the top jack is where a device output plugs in, the bottom jack patches out to a device input. The letter between a column's two jacks is its norm type: <strong>H</strong> half-normalled &middot; <strong>T</strong> thru &middot; <strong>N</strong> normalled. Audio cables: solid = balanced (TRS or XLR), dashed = unbalanced (TS).</p>
+
+  <style>
+    #mapModes,#mapControls{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+    #mapModes button,#mapControls button{font:12px sans-serif;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer}
+    #mapModes button{background:#2a3550}
+    #mapControls button{background:#222733}
+    #mapModes button.off,#mapControls button.off{opacity:.4;text-decoration:line-through}
+    #mapControls button:disabled{opacity:.2;text-decoration:none;cursor:not-allowed}
+    #map{width:94vw;max-width:1600px;margin-left:50%;transform:translateX(-50%);height:auto;background:#0e1014;border:1px solid var(--line);border-radius:10px;touch-action:none}
+    .node rect{fill:#1c1f26;stroke:#2c313b;stroke-width:1.5;cursor:grab}
+    .node text{fill:#e7e9ee;font:12.5px sans-serif;pointer-events:none}
+    .node.sm rect{fill:#141a24}
+    .node.sm text{font:700 10px sans-serif;fill:#c3ccda}
+    .node text.pbnorm{font:700 10px sans-serif;fill:#4ad29a}
+    .node.sm.n-thru rect{stroke-dasharray:3 2}
+    .node.sm.n-norm rect{stroke-width:2.5}
+    .edge.unbal{stroke-dasharray:7 4}
+    .node.dim{opacity:.18}
+    .gbox{fill:none;stroke:#3a4152;stroke-width:1.3;stroke-dasharray:5 5;pointer-events:all;cursor:grab}
+    .gbox.hot{stroke:#c3ccda;stroke-dasharray:none}
+    .gbox.dim{opacity:.25}
+    .glabel{fill:#9aa3b2;font:700 11px sans-serif;pointer-events:all;cursor:grab}
+    .glabel.dim{opacity:.25}
+    .edge{fill:none;stroke-width:2;pointer-events:none}
+    .edge.audio{stroke:#3a7de8}.edge.midi{stroke:#e8833a}.edge.usb{stroke:#4ad29a}
+    .edge.hot{stroke-width:3.5}.edge.dim{opacity:.1}
+  </style>
+  <script>
+  (function(){
+    const NS='http://www.w3.org/2000/svg';
+    // Patchbay is drawn from the rear: 24 on the left, 1 on the right, two jacks per column.
+    // Top row = device outputs plugged in (sources); bottom row = patched out to device inputs.
+    // norm (H/T/N) marks the pair; drawn once in the gap between the two jacks (see build()).
+    const PBNORM={1:'half',2:'half',3:'thru',4:'thru',5:'half',6:'half',7:'thru',8:'thru',9:'thru',10:'thru',11:'thru',12:'thru',13:'half',14:'half',15:'half'};
+    const PBPORTS=[];
+    for(const row of ['T','B'])for(let n=24;n>=1;n--)PBPORTS.push([n+row,String(n)]);
+    const GROUPS=[
+      {id:'mac',label:'MacBook',x:40,y:20,cols:1,ports:[['USB','USB']]},
+      {id:'keyboard',label:'MIDI keyboard',x:240,y:20,cols:1,ports:[['USB','USB']]},
+      {id:'push',label:'Push 2',x:440,y:20,cols:1,ports:[['USB','USB']]},
+      {id:'hub',label:'USB hub',x:720,y:20,cols:2,ports:[['MAC','Mac'],['L8','L8'],['A4C','A4c'],['PUSH','Push']]},
+      {id:'model15',label:'Behringer Model 15',x:634,y:340,cols:2,ports:[['OUT','OUT'],['MIDIIN','MIDI IN']]},
+      {id:'hydra',label:'Hydrasynth',x:700,y:150,cols:2,ports:[['OUTR','OUT R'],['OUTL','OUT L'],['THRU','THRU'],['MIDIIN','MIDI IN']]},
+      {id:'ms70',label:'MS-70CDR',x:832,y:340,cols:4,ports:[['INR','IN R'],['INL','IN L'],['OUTR','OUT R'],['OUTL','OUT L']]},
+      {id:'octatrack',label:'Octatrack',x:1096,y:150,cols:8,ports:[['CUER','CUE R'],['CUEL','CUE L'],['MAINR','MAIN R'],['MAINL','MAIN L'],['IND','IN D'],['INC','IN C'],['INB','IN B'],['INA','IN A'],['MIDITHRU','MIDI THRU'],['MIDIIN','MIDI IN'],['MIDIOUT','MIDI OUT']]},
+      {id:'audio4c',label:'Audio4c',x:1360,y:340,cols:4,ports:[['DINOUT1','DIN OUT'],['DININ1','DIN IN'],['OUT2','OUT2'],['OUT1','OUT1'],['HOST','HOST'],['USB','USB']]},
+      {id:'patchbay',label:'Patchbay',x:40,y:460,cols:24,ports:PBPORTS},
+      {id:'l8',label:'L8',x:944,y:600,cols:2,ports:[['ch3','ch3'],['ch2','ch2'],['ch4','ch4'],['ch1','ch1'],['ch5','ch5'],['USB','USB'],['MASTERL','MASTER L'],['MASTERR','MASTER R']]},
+      {id:'monitors',label:'Monitors',x:944,y:800,cols:2,ports:[['INL','IN L'],['INR','IN R']]}
+    ];
+    const PCABLES=[
+      ['audio4c.OUT1','patchbay.1T','audio','Audio4c OUT1 → PB1 top','TRS'],
+      ['audio4c.OUT2','patchbay.2T','audio','Audio4c OUT2 → PB2 top','TRS'],
+      ['octatrack.MAINL','patchbay.5T','audio','OT MAIN L → PB5 top','TRS'],
+      ['octatrack.MAINR','patchbay.6T','audio','OT MAIN R → PB6 top','TRS'],
+      ['octatrack.CUEL','patchbay.7T','audio','OT CUE L → PB7 top','TRS'],
+      ['octatrack.CUER','patchbay.8T','audio','OT CUE R → PB8 top','TRS'],
+      ['ms70.OUTL','patchbay.9T','audio','MS-70 OUT L → PB9 top','TS'],
+      ['ms70.OUTR','patchbay.10T','audio','MS-70 OUT R → PB10 top','TS'],
+      ['hydra.OUTL','patchbay.13T','audio','Hydra OUT L → PB13 top','TRS'],
+      ['hydra.OUTR','patchbay.14T','audio','Hydra OUT R → PB14 top','TRS'],
+      ['model15.OUT','patchbay.15T','audio','Model 15 OUT → PB15 top','TS'],
+      ['patchbay.1B','octatrack.INA','audio','PB1 bottom → OT IN A','TRS'],
+      ['patchbay.2B','octatrack.INB','audio','PB2 bottom → OT IN B','TRS'],
+      ['patchbay.3B','octatrack.INC','audio','PB3 bottom → OT IN C','TRS'],
+      ['patchbay.4B','octatrack.IND','audio','PB4 bottom → OT IN D','TRS'],
+      ['patchbay.5B','l8.ch1','audio','PB5 bottom → L8 ch1','TRS'],
+      ['patchbay.6B','l8.ch2','audio','PB6 bottom → L8 ch2','TRS'],
+      ['patchbay.11B','ms70.INL','audio','PB11 bottom → MS-70 IN L','TS'],
+      ['patchbay.12B','ms70.INR','audio','PB12 bottom → MS-70 IN R','TS'],
+      ['patchbay.13B','l8.ch3','audio','PB13 bottom → L8 ch3','TRS'],
+      ['patchbay.14B','l8.ch4','audio','PB14 bottom → L8 ch4','TRS'],
+      ['patchbay.15B','l8.ch5','audio','PB15 bottom → L8 ch5','TS'],
+      ['l8.MASTERL','monitors.INL','audio','L8 MASTER L → Monitor L','XLR'],
+      ['l8.MASTERR','monitors.INR','audio','L8 MASTER R → Monitor R','XLR'],
+      ['audio4c.DINOUT1','octatrack.MIDIIN','midi','DIN OUT → OT MIDI IN · M1'],
+      ['octatrack.MIDIOUT','audio4c.DININ1','midi','OT MIDI OUT → DIN IN · M2'],
+      ['octatrack.MIDITHRU','hydra.MIDIIN','midi','OT THRU → Hydra MIDI IN · M3'],
+      ['hydra.THRU','model15.MIDIIN','midi','Hydra THRU → Model 15 · M4'],
+      ['keyboard.USB','audio4c.HOST','usb','Keyboard → HOST · U5'],
+      ['hub.MAC','mac.USB','usb','Hub → Mac · U1'],
+      ['l8.USB','hub.L8','usb','L8 → Hub · U2'],
+      ['audio4c.USB','hub.A4C','usb','Audio4c → Hub · U3'],
+      ['push.USB','hub.PUSH','usb','Push → Hub · U4']
+    ];
+    function expandGroups(groups){
+      const nodes={},boxes=[],pw=56,ph=22,gx=10,gy=10,hd=28,pad=15;
+      groups.forEach(G=>{const c=G.cols,rows=Math.ceil(G.ports.length/c),w=pad*2+c*pw+(c-1)*gx,h=hd+pad*2+rows*ph+(rows-1)*gy;boxes.push({id:G.id,label:G.label,x:G.x,y:G.y,w,h});G.ports.forEach((p,i)=>{const col=i%c,row=(i/c)|0;nodes[G.id+'.'+p[0]]={label:p[1],x:G.x+pad+col*(pw+gx)+pw/2,y:G.y+hd+pad+row*(ph+gy)+ph/2,small:1,group:G.id,groupLabel:G.label,norm:p[2]};});});
+      return {nodes,boxes};
+    }
+    const PG=expandGroups(GROUPS);
+    let DEV=PG.nodes,EDGES=PCABLES;const BOXES=PG.boxes;
+    const state={enabled:{},focus:null,drag:null,lock:null,layers:{audio:true,midi:true,usb:true}};
+    const svg=document.getElementById('map'),controls=document.getElementById('mapControls'),modes=document.getElementById('mapModes');
+    let nodeEls={},edgeEls=[],boxEls={};
+    function el(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+    function grp(id){const d=DEV[id];return d&&d.group?d.group:id;}
+    function en(id){return state.enabled[grp(id)]!==false;}
+    function path(aId,bId,off){const a=DEV[aId],b=DEV[bId];if(!off)return `M${a.x},${a.y} L${b.x},${b.y}`;const mx=(a.x+b.x)/2,my=(a.y+b.y)/2,dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1;return `M${a.x},${a.y} Q${mx-dy/len*off},${my+dx/len*off} ${b.x},${b.y}`;}
+    function deviceList(){return BOXES.length?BOXES.map(b=>[b.id,b.label]):Object.keys(DEV).filter(id=>!DEV[id].small).map(id=>[id,DEV[id].label]);}
+    function buildControls(){
+      controls.innerHTML='';
+      const inLayer=new Set();EDGES.forEach(e=>{if(state.layers[e[2]]!==false){inLayer.add(grp(e[0]));inLayer.add(grp(e[1]));}});
+      deviceList().forEach(([id,label])=>{
+        const b=document.createElement('button');
+        b.textContent=label;b.className=state.enabled[id]===false?'off':'';b.disabled=!inLayer.has(id);
+        b.onclick=()=>{state.enabled[id]=state.enabled[id]===false;if(state.focus&&grp(state.focus)===id)state.focus=null;if(state.lock&&grp(state.lock)===id)state.lock=null;build();};
+        controls.appendChild(b);
+      });
+    }
+    function build(){
+      while(svg.firstChild)svg.removeChild(svg.firstChild);
+      nodeEls={};edgeEls=[];boxEls={};
+      deviceList().forEach(([id])=>{if(state.enabled[id]===undefined)state.enabled[id]=true;});
+      const vis=EDGES.filter(e=>en(e[0])&&en(e[1])&&state.layers[e[2]]!==false);
+      const active=new Set();vis.forEach(e=>{active.add(grp(e[0]));active.add(grp(e[1]));});
+      BOXES.forEach(b=>{if(state.enabled[b.id]===false||!active.has(b.id))return;const r=el('rect',{class:'gbox',x:b.x,y:b.y,width:b.w,height:b.h,rx:10});const t=el('text',{class:'glabel',x:b.x+b.w/2,y:b.y+18,'text-anchor':'middle'});t.textContent=b.label;[r,t].forEach(elm=>{elm.addEventListener('pointerenter',()=>{if(!state.drag&&!state.lock){state.focus=b.id;paint();}});elm.addEventListener('pointerleave',()=>{if(!state.drag&&!state.lock){state.focus=null;paint();}});elm.addEventListener('pointerdown',ev=>startDrag(ev,b.id));});svg.appendChild(r);svg.appendChild(t);boxEls[b.id]={r,t};});
+      const cnt={},idx={};
+      vis.forEach(e=>{const k=[e[0],e[1]].slice().sort().join('|');cnt[k]=(cnt[k]||0)+1;});
+      vis.forEach(e=>{const k=[e[0],e[1]].slice().sort().join('|');const i=(idx[k]=(idx[k]||0)+1)-1;const off=cnt[k]>1?(i-(cnt[k]-1)/2)*22:0;const p=el('path',{class:'edge '+e[2]+(e[4]==='TS'?' unbal':''),d:path(e[0],e[1],off)});svg.appendChild(p);edgeEls.push({el:p,a:e[0],b:e[1],kind:e[2],label:e[3],off,conn:e[4]});});
+      Object.keys(DEV).forEach(id=>{
+        if(!en(id)||!active.has(grp(id)))return;
+        const d=DEV[id],sm=!!d.small,w=sm?52:144,h=sm?22:44,g=el('g',{class:'node'+(sm?' sm':'')+(d.norm?' n-'+d.norm:''),'data-id':id,transform:`translate(${d.x},${d.y})`});
+        g.appendChild(el('rect',{x:-w/2,y:-h/2,width:w,height:h,rx:sm?4:8}));
+        const t=el('text',{x:0,y:sm?4:5,'text-anchor':'middle'});t.textContent=d.norm?d.label+'  '+{half:'H',thru:'T',norm:'N'}[d.norm]:d.label;g.appendChild(t);
+        const pm=/^patchbay\.(\d+)T$/.exec(id);
+        if(pm&&PBNORM[pm[1]]){const nm=el('text',{x:0,y:20,'text-anchor':'middle',class:'pbnorm'});nm.textContent={half:'H',thru:'T',norm:'N'}[PBNORM[pm[1]]];g.appendChild(nm);}
+        g.addEventListener('pointerenter',()=>{if(!state.drag&&!state.lock){state.focus=id;paint();}});
+        g.addEventListener('pointerleave',()=>{if(!state.drag&&!state.lock){state.focus=null;paint();}});
+        g.addEventListener('pointerdown',ev=>startDrag(ev,id));
+        svg.appendChild(g);nodeEls[id]=g;
+      });
+      buildControls();paint();
+    }
+    function shade(kind,i){
+      const P={audio:[214,22,52,90,44,80],midi:[28,18,60,92,46,74],usb:[158,20,48,84,44,76]}[kind]||[214,22,52,90,44,80];
+      const a=(i*0.6180339887)%1,b=(i*0.3247179572)%1,c=(i*0.7548776662)%1;
+      const H=Math.round(P[0]+(a-0.5)*2*P[1]),S=Math.round(P[2]+b*(P[3]-P[2])),L=Math.round(P[4]+c*(P[5]-P[4]));
+      return `hsl(${H},${S}%,${L}%)`;
+    }
+    function paint(){
+      const f=state.focus,isPort=f&&!!DEV[f],fd=f?(isPort?grp(f):f):null;
+      const mine=f?edgeEls.filter(e=>isPort?(e.a===f||e.b===f):(grp(e.a)===f||grp(e.b)===f)):[];
+      const litDev=new Set();mine.forEach(e=>{litDev.add(grp(e.a));litDev.add(grp(e.b));});
+      const kc={},ki={},portShade={};
+      mine.forEach(e=>{kc[e.kind]=(kc[e.kind]||0)+1;});
+      mine.forEach(e=>{const i=(ki[e.kind]=(ki[e.kind]||0)+1)-1;e._sh=shade(e.kind,i);portShade[e.a]=e._sh;portShade[e.b]=e._sh;});
+      Object.keys(nodeEls).forEach(id=>{const g=nodeEls[id],r=g.querySelector('rect');g.classList.remove('dim');r.style.stroke='';r.style.strokeWidth='';r.style.fill='';
+        if(f){if(portShade[id]){r.style.stroke=portShade[id];r.style.strokeWidth='2.5';}else g.classList.add('dim');}
+        if(state.lock===id){r.style.strokeWidth='3';r.style.fill='#222a36';}});
+      edgeEls.forEach(e=>{e.el.classList.remove('hot','dim');e.el.style.stroke='';if(f){if(mine.indexOf(e)>=0){e.el.classList.add('hot');e.el.style.stroke=e._sh;}else e.el.classList.add('dim');}});
+      const ld=state.lock?grp(state.lock):null;
+      Object.keys(boxEls).forEach(id=>{const bx=boxEls[id];bx.r.classList.remove('hot','dim');bx.t.classList.remove('dim');if(f){if(id===fd)bx.r.classList.add('hot');else if(!litDev.has(id)){bx.r.classList.add('dim');bx.t.classList.add('dim');}}if(id===ld)bx.r.classList.add('hot');});
+    }
+    function pt(ev){const m=svg.getScreenCTM();return {x:(ev.clientX-m.e)/m.a,y:(ev.clientY-m.f)/m.d};}
+    svg.addEventListener('pointerdown',e=>{if(e.target===svg){state.lock=null;state.focus=null;paint();}});
+    function startDrag(ev,id){ev.preventDefault();const p=pt(ev),g=grp(id),ids=Object.keys(DEV).filter(k=>grp(k)===g),orig={};ids.forEach(k=>orig[k]={x:DEV[k].x,y:DEV[k].y});const bx=BOXES.find(b=>b.id===g);state.drag={g,id0:id,ids,orig,bx,box0:bx?{x:bx.x,y:bx.y}:null,sx:p.x,sy:p.y,moved:false};window.addEventListener('pointermove',onMove);window.addEventListener('pointerup',endDrag);}
+    function onMove(ev){if(!state.drag)return;const p=pt(ev),D=state.drag,dx=p.x-D.sx,dy=p.y-D.sy;if(!D.moved&&Math.hypot(dx,dy)>4)D.moved=true;if(!D.moved)return;D.ids.forEach(k=>{DEV[k].x=D.orig[k].x+dx;DEV[k].y=D.orig[k].y+dy;if(nodeEls[k])nodeEls[k].setAttribute('transform',`translate(${DEV[k].x},${DEV[k].y})`);});if(D.bx&&boxEls[D.g]){D.bx.x=D.box0.x+dx;D.bx.y=D.box0.y+dy;boxEls[D.g].r.setAttribute('x',D.bx.x);boxEls[D.g].r.setAttribute('y',D.bx.y);boxEls[D.g].t.setAttribute('x',D.bx.x+D.bx.w/2);boxEls[D.g].t.setAttribute('y',D.bx.y+18);}const set=new Set(D.ids);edgeEls.forEach(e=>{if(set.has(e.a)||set.has(e.b))e.el.setAttribute('d',path(e.a,e.b,e.off));});}
+    function endDrag(){const D=state.drag;state.drag=null;window.removeEventListener('pointermove',onMove);window.removeEventListener('pointerup',endDrag);if(D&&!D.moved){if(state.lock===D.id0){state.lock=null;state.focus=null;}else{state.lock=D.id0;state.focus=D.id0;}paint();}}
+    function buildLayers(){
+      modes.innerHTML='';const C={audio:'#3a7de8',midi:'#e8833a',usb:'#4ad29a'};
+      ['audio','midi','usb'].forEach(k=>{const b=document.createElement('button');b.textContent=k.toUpperCase();b.className=state.layers[k]===false?'off':'';b.style.background=C[k];b.style.color='#0b0d11';b.style.borderColor=C[k];b.onclick=()=>{state.layers[k]=state.layers[k]===false?true:false;buildLayers();build();};modes.appendChild(b);});
+    }
+    buildLayers();build();
+  })();
+  </script>
+
+  <h2>Three ways to feed the Octatrack</h2>
+  <table class="cmp">
+    <thead><tr><th>Method</th><th>Signal path</th><th>Trade-off</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="badge">1</span> One synth <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> OT</td>
+        <td>Mult it at the patchbay so it feeds the L8 (record) <em>and</em> the OT (sample) at once.</td>
+        <td>Clean, free.</td>
+      </tr>
+      <tr>
+        <td><span class="badge">2</span> Live <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> OT</td>
+        <td>A Live output bus <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> Audio4c out 1/2 <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> patchbay <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> OT (half-normalled, so it's always there).<br>No-aggregate fallback: Live <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> L8 USB return <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> an L8 monitor send <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> OT.</td>
+        <td>Needs an Aggregate Device &mdash; see Setup.</td>
+      </tr>
+      <tr>
+        <td><span class="badge">3</span> A blend <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> OT</td>
+        <td>Patch several taps into an external submixer (add one back &mdash; this is the job the Yamaha did), its main out <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> OT.</td>
+        <td>Custom submix; keeps the L8's monitor mixes free.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>The two sessions</h2>
+  <div class="two">
+    <div class="panel">
+      <h3>Jam &amp; Capture</h3>
+      Play, hit record, each synth lands as its own stem on the L8's SD card &mdash; laptop optional.
+      Brain is whichever Audio4c scene you're in (Live, or Octatrack with the lid closed).
+    </div>
+    <div class="panel">
+      <h3>Compose</h3>
+      Drag the SD stems into Live, arrange, overdub synths live (they're already on L8 channels <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> already in Live over USB).
+      Octatrack there as a drum machine if you want it, ignored if not.
+    </div>
+  </div>
+
+  <h2>Sampling Live into the Octatrack</h2>
+  <dl class="defs">
+    <dt>MIDI</dt>
+    <dd>An OT MIDI track plays a Live instrument (matrix routes OT <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> Mac).</dd>
+    <dt>Audio</dt>
+    <dd>Live's output rides a Live bus <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> Audio4c out <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> OT inputs, and the OT samples it.</dd>
+  </dl>
+  <p class="sub">The laptop becomes another voice you can sequence and sample in the box.</p>
+
+  <h2>Setup notes</h2>
+  <dl class="defs">
+    <dt>USB hub</dt>
+    <dd>The M2 Air has 2 USB-C ports total. Put the L8, Audio4c, and Push on a <em>powered</em> hub so the bus-powered gear stays stable. The keyboard goes into the Audio4c's USB host port, so it still plays synths with the laptop off.</dd>
+    <dt>Live <svg class="arr" viewBox="0 0 26 18" aria-hidden="true"><path d="M2 9h18M14 3l6 6-6 6"/></svg> OT, the clean way</dt>
+    <dd>In macOS, make an <strong>Aggregate Device</strong> = L8 + Audio4c, with the <strong>L8 as clock master</strong>. In Live, inputs come from the L8; assign one output pair to Audio4c OUT 1/2 = your "send to OT" bus (half-normalled to the OT at cols 1&ndash;2). Check for drift the first session; if you hear it, the L8-monitor fallback avoids aggregation entirely.</dd>
+    <dt>Monitoring stays on the L8</dt>
+    <dd>Zero-latency analog. Turn Live's monitoring off so you don't double-hear with USB latency.</dd>
+  </dl>
+
+</div>
+</body>
+</html>

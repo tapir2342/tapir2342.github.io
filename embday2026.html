@@ -22,8 +22,14 @@
     color: var(--cream); font-family: "Fredoka", system-ui, sans-serif;
     display: flex; align-items: center; justify-content: center;
   }
+  /* repeating birthday wallpaper: cake, present, balloon, hat, gamepad. One colour, tilted 45deg */
+  body::before {
+    content: ""; position: fixed; inset: -50%; width: 200%; height: 200%;
+    pointer-events: none; z-index: 0; opacity: .06; transform: rotate(45deg);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cg fill='%23eef1e8'%3E%3Cg transform='translate(39 14)'%3E%3Cpath d='M36 9c2 3 2 6 0 7-2-1-2-4 0-7z'/%3E%3Crect x='35' y='16' width='2' height='13'/%3E%3Cpath d='M14 31h44v3c0 6-10 6-10 0 0 8-12 8-12 0 0 5-9 5-9 0 0 7-13 7-13 0z'/%3E%3Crect x='14' y='38' width='44' height='20' rx='6'/%3E%3Cellipse cx='36' cy='61' rx='28' ry='2.5'/%3E%3C/g%3E%3Cg transform='translate(201 25)'%3E%3Crect x='4' y='16' width='40' height='30' rx='2'/%3E%3Cpolygon points='23,15 6,5 11,19'/%3E%3Cpolygon points='25,15 42,5 37,19'/%3E%3Ccircle cx='24' cy='14' r='3.5'/%3E%3Crect x='19' y='16' width='2' height='30' fill='%2311302c'/%3E%3Crect x='27' y='16' width='2' height='30' fill='%2311302c'/%3E%3C/g%3E%3Cg transform='translate(58 123)'%3E%3Cellipse cx='17' cy='17' rx='13' ry='16'/%3E%3Cpolygon points='17,33 14,38 20,38'/%3E%3Cpath d='M17 38 q4 8 -2 16' fill='none' stroke='%23eef1e8' stroke-width='2'/%3E%3C/g%3E%3Cg transform='translate(51 223)'%3E%3Cpolygon points='24,2 42,52 6,52'/%3E%3Ccircle cx='24' cy='3' r='5'/%3E%3Ccircle cx='18' cy='26' r='2.6'/%3E%3Ccircle cx='29' cy='20' r='2.6'/%3E%3Ccircle cx='22' cy='38' r='2.6'/%3E%3C/g%3E%3Cg transform='translate(195 126)'%3E%3Crect x='4' y='8' width='52' height='20' rx='10'/%3E%3Cellipse cx='12' cy='26' rx='10' ry='9'/%3E%3Cellipse cx='48' cy='26' rx='10' ry='9'/%3E%3Crect x='11' y='16' width='12' height='4' rx='1' fill='%2311302c'/%3E%3Crect x='15' y='12' width='4' height='12' rx='1' fill='%2311302c'/%3E%3Ccircle cx='44' cy='15' r='3' fill='%2311302c'/%3E%3Ccircle cx='49' cy='21' r='3' fill='%2311302c'/%3E%3C/g%3E%3Cg transform='translate(189 214)'%3E%3Cpath d='M36 9c2 3 2 6 0 7-2-1-2-4 0-7z'/%3E%3Crect x='35' y='16' width='2' height='13'/%3E%3Cpath d='M14 31h44v3c0 6-10 6-10 0 0 8-12 8-12 0 0 5-9 5-9 0 0 7-13 7-13 0z'/%3E%3Crect x='14' y='38' width='44' height='20' rx='6'/%3E%3Cellipse cx='36' cy='61' rx='28' ry='2.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") 0 0/300px 300px repeat;
+  }
   .card {
-    width: min(680px, 94vw); background: var(--card); position: relative;
+    width: min(680px, 94vw); background: var(--card); position: relative; z-index: 1;
     border: 2px solid var(--edge); border-radius: 14px; overflow: hidden;
     box-shadow: 0 24px 60px #0009;
   }
@@ -121,11 +127,13 @@
           <circle cx="22" cy="3" r="5" fill="var(--gold)"/>
         </svg>
         <svg class="pad" width="60" height="44" viewBox="0 0 60 44" aria-hidden="true">
-          <rect x="6" y="12" width="48" height="24" rx="12" fill="var(--pink)"/>
-          <rect x="14" y="21" width="11" height="3.5" rx="1.75" fill="var(--ink)"/>
-          <rect x="17.75" y="17.25" width="3.5" height="11" rx="1.75" fill="var(--ink)"/>
-          <circle cx="39" cy="20" r="2.6" fill="var(--ink)"/>
-          <circle cx="45" cy="26" r="2.6" fill="var(--ink)"/>
+          <rect x="4" y="8" width="52" height="20" rx="10" fill="var(--pink)"/>
+          <ellipse cx="12" cy="26" rx="10" ry="9" fill="var(--pink)"/>
+          <ellipse cx="48" cy="26" rx="10" ry="9" fill="var(--pink)"/>
+          <rect x="11" y="16" width="12" height="4" rx="1" fill="var(--ink)"/>
+          <rect x="15" y="12" width="4" height="12" rx="1" fill="var(--ink)"/>
+          <circle cx="44" cy="15" r="3" fill="var(--ink)"/>
+          <circle cx="49" cy="21" r="3" fill="var(--ink)"/>
         </svg>
         <svg class="balloon" width="34" height="56" viewBox="0 0 34 56" aria-hidden="true">
           <ellipse cx="17" cy="17" rx="13" ry="16" fill="var(--gold)"/>
