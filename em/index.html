@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Em's Birthday Gaming Night</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fredoka:wght@400;500;600;700&family=Lilita+One&display=swap" rel="stylesheet">
+<style>
+  /* twilioquest-76 palette (lospec.com/palette-list/twilioquest-76) */
+  :root {
+    --bg:#11302c; --bg2:#1c423a; --card:#163d34; --edge:#3f8a6a;
+    --cream:#eef1e8; --gold:#e8bf63; --pink:#7bd7a9; --coral:#e08a52;
+    --teal:#5bbfb0; --sky:#8ab6d8; --lilac:#7bd7a9; --grape:#52b281;
+    --green:#9fce8f; --ink:#0e2620; --soft:#cfe0d2; --mute:#8aa890;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; padding: 1.25rem;
+    background: radial-gradient(circle at 50% -10%, var(--bg2), var(--bg) 65%);
+    color: var(--cream); font-family: "Fredoka", system-ui, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card {
+    width: min(680px, 94vw); background: var(--card); position: relative;
+    border: 2px solid var(--edge); border-radius: 14px; overflow: hidden;
+    box-shadow: 0 24px 60px #0009;
+  }
+  /* dashed greeting-card frame inside the border */
+  .card::after {
+    content: ""; position: absolute; inset: 24px 16px 16px; pointer-events: none;
+    border: 2px dashed var(--edge); opacity: .5; border-radius: 9px;
+  }
+  /* confetti banner */
+  .confetti {
+    height: 14px;
+    background:
+      radial-gradient(circle, var(--pink) 40%, transparent 42%) 0 0/22px 14px,
+      radial-gradient(circle, var(--gold) 40%, transparent 42%) 11px 7px/22px 14px,
+      radial-gradient(circle, var(--teal) 40%, transparent 42%) 22px 0/44px 14px,
+      radial-gradient(circle, var(--lilac) 40%, transparent 42%) 33px 7px/44px 14px;
+  }
+  .inner { padding: 2.5rem 2.5rem 2.75rem; text-align: center; }
+
+  .deco { display: flex; gap: .9rem; justify-content: center; align-items: flex-end; margin-bottom: .5rem; }
+  .deco svg { height: 48px; width: auto; }
+  .deco .hat { transform: rotate(-12deg); }
+  .deco .pad { transform: rotate(8deg); }
+  .greeting { font-family: "Caveat", cursive; font-weight: 700; line-height: .95;
+    font-size: clamp(2.2rem, 5vw, 3.2rem); color: var(--gold); transform: rotate(-3deg);
+    margin: .2rem 0; }
+  .greeting sup { font-size: .4em; }
+  h1 { font-family: "Lilita One", system-ui, sans-serif; font-weight: 400;
+    line-height: 1.02; margin: .4rem 0 .75rem; letter-spacing: .01em;
+    font-size: clamp(2.4rem, 5vw, 3.4rem); color: #fff; transform: rotate(-2deg); }
+  h1 .pop { color: var(--pink); }
+  .emote { font-family: "Lilita One", system-ui, sans-serif; font-size: 1.5rem;
+    letter-spacing: .1em; color: var(--gold); margin-bottom: .25rem; transform: rotate(2deg); }
+  .blurb { color: var(--soft); font-size: 1.02rem; margin: 0 auto 1.75rem; max-width: 42ch; }
+  .emote-img { height: 1.4em; vertical-align: -.35em; }
+
+  .info { display: flex; flex-direction: column; gap: .8rem; margin: 0 auto 1.75rem; max-width: 420px; }
+  .box { background: #ffffff0d; border-radius: 10px; padding: .85rem 1.1rem; text-align: center; }
+  .boxlabel { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); font-weight: 600; margin-bottom: .4rem; }
+  .boxval { color: var(--cream); font-weight: 500; }
+  .dim { color: var(--mute); font-weight: 400; font-size: .85em; }
+  .cal { color: var(--pink); text-decoration: underline; cursor: pointer; font-size: .85rem; }
+
+  .links { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+  .btn { text-decoration: none; color: var(--ink); display: inline-flex; align-items: center;
+    gap: .5rem; font-weight: 600; font-size: .95rem; padding: .6rem 1.2rem; border-radius: 999px;
+    transition: transform .12s, filter .12s, box-shadow .12s; }
+  .btn:hover { transform: translateY(-2px); filter: brightness(1.08); box-shadow: 0 6px 16px #0006; }
+  .btn:active { transform: translateY(0); filter: brightness(.96); box-shadow: none; }
+  .btn svg { width: 18px; height: 18px; fill: currentColor; }
+  .twitch { background: var(--grape); }
+  .discord { background: var(--sky); }
+
+  .micnote { color: var(--mute); font-size: .9rem; font-style: italic; margin: -1rem 0 2rem; }
+  h2 { color: var(--pink); font-size: 1.3rem; margin: 0 0 1rem; }
+  .note { color: var(--mute); font-size: .88rem; font-style: italic; margin: 0 0 .8rem; }
+  h2 + .note { margin-top: -.7rem; }
+
+  .games { display: grid; gap: .7rem; grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 460px) { .games { grid-template-columns: repeat(2, 1fr); } }
+  .game { text-decoration: none; color: inherit; border: 1px solid #ffffff1a;
+    border-radius: 7px; overflow: hidden; background: var(--bg); transition: border-color .12s; }
+  .game:hover { border-color: var(--gold); }
+  .game img { width: 100%; display: block; aspect-ratio: 460/215; object-fit: cover; }
+  .game .b { padding: .35rem .6rem; display: flex; justify-content: space-between; align-items: baseline; }
+  .game.suggest { border-style: dashed; border-color: var(--edge); background: transparent; }
+  .game .ph { aspect-ratio: 460/215; display: flex; align-items: center; justify-content: center;
+    font-family: "Lilita One", system-ui, sans-serif; font-size: 2.4rem; color: var(--mute); }
+  .game .n { font-weight: 500; font-size: .9rem; color: var(--soft); }
+  .game .p { font-weight: 600; font-size: .85rem; color: var(--green); }
+
+  .foot { color: var(--mute); font-size: .78rem; font-style: italic; margin: 1rem auto 0; max-width: 42ch; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="confetti"></div>
+    <div class="inner">
+      <div class="deco">
+        <svg class="balloon" width="34" height="56" viewBox="0 0 34 56" aria-hidden="true">
+          <ellipse cx="17" cy="17" rx="13" ry="16" fill="var(--pink)"/>
+          <polygon points="17,33 14,38 20,38" fill="var(--pink)"/>
+          <path d="M17 38 q4 8 -2 16" stroke="var(--mute)" stroke-width="1.5" fill="none"/>
+        </svg>
+        <svg class="hat" width="44" height="52" viewBox="0 0 44 52" aria-hidden="true">
+          <polygon points="22,2 40,46 4,46" fill="var(--coral)"/>
+          <polygon points="22,2 31,24 13,24" fill="var(--gold)" opacity=".55"/>
+          <circle cx="14" cy="34" r="2.5" fill="var(--cream)"/>
+          <circle cx="26" cy="30" r="2.5" fill="var(--cream)"/>
+          <circle cx="20" cy="42" r="2.5" fill="var(--cream)"/>
+          <circle cx="22" cy="3" r="5" fill="var(--gold)"/>
+        </svg>
+        <svg class="pad" width="60" height="44" viewBox="0 0 60 44" aria-hidden="true">
+          <rect x="6" y="12" width="48" height="24" rx="12" fill="var(--pink)"/>
+          <rect x="14" y="21" width="11" height="3.5" rx="1.75" fill="var(--ink)"/>
+          <rect x="17.75" y="17.25" width="3.5" height="11" rx="1.75" fill="var(--ink)"/>
+          <circle cx="39" cy="20" r="2.6" fill="var(--ink)"/>
+          <circle cx="45" cy="26" r="2.6" fill="var(--ink)"/>
+        </svg>
+        <svg class="balloon" width="34" height="56" viewBox="0 0 34 56" aria-hidden="true">
+          <ellipse cx="17" cy="17" rx="13" ry="16" fill="var(--gold)"/>
+          <polygon points="17,33 14,38 20,38" fill="var(--gold)"/>
+          <path d="M17 38 q-4 8 2 16" stroke="var(--mute)" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div class="greeting">Happy Birthday<sup>*</sup>, <span class="pop">Em</span>!</div>
+      <h1>Gaming Night</h1>
+      <p class="blurb">*Birthday not actually on that day.<br>You can still congratulate me though. <img class="emote-img" src="https://static-cdn.jtvnw.net/emoticons/v2/25/default/light/3.0" alt="Kappa"></p>
+
+      <div class="info">
+        <div class="box">
+          <div class="boxlabel">When</div>
+          <div class="boxval"><b id="when">…</b> <span class="dim">(your time)</span> &nbsp;<a id="cal" class="cal" download="ems-birthday.ics">Add to calendar</a></div>
+        </div>
+        <div class="box">
+          <div class="boxlabel">Where</div>
+          <div class="links">
+            <a class="btn twitch" href="https://twitch.tv/emaudio" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+              <span>Watch the stream</span>
+            </a>
+            <a class="btn discord" href="https://discord.gg/YQrhwTZHt" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.009c.12.099.246.198.373.292a.077.077 0 01-.006.128 12.3 12.3 0 01-1.873.891.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.055c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.332-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.332-.946 2.418-2.157 2.418z"/></svg>
+              <span>Jump in voice</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <h2>What will we play?</h2>
+      <p class="note">Install the free ones ahead of time. Grab the paid ones only if we decide to actually play them.</p>
+      <div class="games">
+        <a class="game" href="https://store.steampowered.com/app/1782210/Crab_Game/" target="_blank" rel="noopener">
+          <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1782210/header.jpg" alt="Crab Game">
+          <div class="b"><span class="n">Crab Game</span><span class="p">Free</span></div>
+        </a>
+        <a class="game" href="https://store.steampowered.com/app/1568590/Goose_Goose_Duck/" target="_blank" rel="noopener">
+          <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1568590/header.jpg" alt="Goose Goose Duck">
+          <div class="b"><span class="n">Goose Goose Duck</span><span class="p">Free</span></div>
+        </a>
+        <a class="game" href="https://store.steampowered.com/app/327030/Worms_WMD/" target="_blank" rel="noopener">
+          <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/327030/header.jpg" alt="Worms W.M.D">
+          <div class="b"><span class="n">Worms W.M.D</span><span class="p">$5.99</span></div>
+        </a>
+        <a class="game" href="https://store.steampowered.com/app/431240/Golf_With_Your_Friends/" target="_blank" rel="noopener">
+          <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/431240/header.jpg" alt="Golf With Your Friends">
+          <div class="b"><span class="n">Golf With Your Friends</span><span class="p">$1.49</span></div>
+        </a>
+        <a class="game" href="https://store.steampowered.com/app/386940/Ultimate_Chicken_Horse/" target="_blank" rel="noopener">
+          <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/386940/header.jpg" alt="Ultimate Chicken Horse">
+          <div class="b"><span class="n">Ultimate Chicken Horse</span><span class="p">$5.24</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== EDIT THE EVENT TIME HERE (EDT) =====
+    const EVENT_TIME_EDT = "2026-07-06T14:00:00-04:00"; // 2 PM EDT on the 6th. -04:00 = EDT, keep it
+    // ==========================================
+    const d = new Date(EVENT_TIME_EDT);
+    document.getElementById("when").textContent = d.toLocaleString([], {
+      weekday: "short", month: "short", day: "numeric",
+      hour: "numeric", minute: "2-digit"
+    });
+
+    // Build a downloadable calendar invite from the same time. 3h default.
+    const utc = t => new Date(t).toISOString().replace(/[-:]|\.\d{3}/g, "");
+    const ics = [
+      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ems-birthday//EN",
+      "BEGIN:VEVENT", "UID:ems-birthday-game-night",
+      "DTSTAMP:" + utc(d),
+      "DTSTART:" + utc(d),
+      "DTEND:" + utc(d.getTime() + 3 * 3600 * 1000),
+      "SUMMARY:Em's Birthday Game Night",
+      "DESCRIPTION:Online game night. Voice: https://discord.gg/YQrhwTZHt  Stream: https://twitch.tv/emaudio",
+      "END:VEVENT", "END:VCALENDAR"
+    ].join("\r\n");
+    document.getElementById("cal").href =
+      "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
+  </script>
+</body>
+</html>
