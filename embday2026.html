@@ -82,6 +82,9 @@
   h2 { color: var(--pink); font-size: 1.3rem; margin: 0 0 1rem; }
   .note { color: var(--mute); font-size: .88rem; font-style: italic; margin: 0 0 .8rem; }
   h2 + .note { margin-top: -.7rem; }
+  .gamegroup { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); font-weight: 600; margin: 1.3rem 0 .6rem; }
+  h2 + .gamegroup { margin-top: .2rem; }
 
   .games { display: grid; gap: .7rem; grid-template-columns: repeat(3, 1fr); }
   @media (max-width: 460px) { .games { grid-template-columns: repeat(2, 1fr); } }
@@ -155,7 +158,8 @@
       </div>
 
       <h2>What will we play?</h2>
-      <p class="note">Install the free ones ahead of time. Grab the paid ones only if we decide to actually play them.</p>
+
+      <h3 class="gamegroup">Install these now — they're free</h3>
       <div class="games">
         <a class="game" href="https://store.steampowered.com/app/1782210/Crab_Game/" target="_blank" rel="noopener">
           <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1782210/header.jpg" alt="Crab Game">
@@ -165,6 +169,10 @@
           <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1568590/header.jpg" alt="Goose Goose Duck">
           <div class="b"><span class="n">Goose Goose Duck</span><span class="p">Free</span></div>
         </a>
+      </div>
+
+      <h3 class="gamegroup">Don't buy yet — only if we pick them on the night</h3>
+      <div class="games">
         <a class="game" href="https://store.steampowered.com/app/327030/Worms_WMD/" target="_blank" rel="noopener">
           <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/327030/header.jpg" alt="Worms W.M.D">
           <div class="b"><span class="n">Worms W.M.D</span><span class="p">$5.99</span></div>
