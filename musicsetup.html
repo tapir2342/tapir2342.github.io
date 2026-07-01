@@ -58,7 +58,7 @@
   <div id="mapModes"></div>
   <div id="mapControls"></div>
   <svg id="map" viewBox="0 0 1680 900" role="img" aria-label="Interactive device map"></svg>
-  <p class="sub">The patchbay is shown from the <strong>rear</strong> (24 on the left, 1 on the right). Each column has <strong>two jacks</strong>: the top jack is where a device output plugs in, the bottom jack patches out to a device input. The letter between a column's two jacks is its norm type: <strong>H</strong> half-normalled &middot; <strong>T</strong> thru &middot; <strong>N</strong> normalled. Audio cables: solid = balanced (TRS or XLR), dashed = unbalanced (TS).</p>
+  <p class="sub">The patchbay is shown from the <strong>rear</strong> (24 on the left, 1 on the right). Each column has <strong>two jacks</strong>: the top jack is where a device output plugs in, the bottom jack patches out to a device input. The letter between a column's two jacks is its norm type: <strong>H</strong> half-normalled &middot; <strong>T</strong> thru &middot; <strong>N</strong> normalled. Audio cables: solid = balanced (TRS or XLR), dashed = unbalanced (TS or RCA), thick = speaker cable.</p>
 
   <style>
     #mapModes,#mapControls{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
@@ -84,6 +84,7 @@
     .glabel.dim{opacity:.25}
     .edge{fill:none;stroke-width:2;pointer-events:none}
     .edge.audio{stroke:#3a7de8}.edge.midi{stroke:#e8833a}.edge.usb{stroke:#4ad29a}
+    .edge.spk{stroke-width:4.5}
     .edge.hot{stroke-width:3.5}.edge.dim{opacity:.1}
   </style>
   <script>
@@ -107,6 +108,8 @@
       {id:'audio4c',label:'Audio4c',x:1360,y:340,cols:4,ports:[['DINOUT1','DIN OUT'],['DININ1','DIN IN'],['OUT2','OUT2'],['OUT1','OUT1'],['HOST','HOST'],['USB','USB']]},
       {id:'patchbay',label:'Patchbay',x:40,y:460,cols:24,ports:PBPORTS},
       {id:'l8',label:'L8',x:944,y:600,cols:2,ports:[['ch3','ch3'],['ch2','ch2'],['ch4','ch4'],['ch1','ch1'],['ch5','ch5'],['USB','USB'],['MASTERL','MASTER L'],['MASTERR','MASTER R']]},
+      {id:'dati',label:'Millenium DATI',x:1180,y:640,cols:2,ports:[['INL','IN L'],['INR','IN R'],['OUTL','OUT L'],['OUTR','OUT R']]},
+      {id:'marantz',label:'Marantz PM8003',x:1200,y:800,cols:2,ports:[['INL','IN L'],['INR','IN R'],['SPKL','SPK L'],['SPKR','SPK R']]},
       {id:'monitors',label:'Monitors',x:944,y:800,cols:2,ports:[['INL','IN L'],['INR','IN R']]}
     ];
     const PCABLES=[
@@ -132,8 +135,12 @@
       ['patchbay.13B','l8.ch3','audio','PB13 bottom → L8 ch3','TRS'],
       ['patchbay.14B','l8.ch4','audio','PB14 bottom → L8 ch4','TRS'],
       ['patchbay.15B','l8.ch5','audio','PB15 bottom → L8 ch5','TS'],
-      ['l8.MASTERL','monitors.INL','audio','L8 MASTER L → Monitor L','XLR'],
-      ['l8.MASTERR','monitors.INR','audio','L8 MASTER R → Monitor R','XLR'],
+      ['l8.MASTERL','dati.INL','audio','L8 MASTER L → DATI IN L','XLR'],
+      ['l8.MASTERR','dati.INR','audio','L8 MASTER R → DATI IN R','XLR'],
+      ['dati.OUTL','marantz.INL','audio','DATI OUT L → Marantz IN L','RCA'],
+      ['dati.OUTR','marantz.INR','audio','DATI OUT R → Marantz IN R','RCA'],
+      ['marantz.SPKL','monitors.INL','audio','Marantz SPK L → Monitor L','SPK'],
+      ['marantz.SPKR','monitors.INR','audio','Marantz SPK R → Monitor R','SPK'],
       ['audio4c.DINOUT1','octatrack.MIDIIN','midi','DIN OUT → OT MIDI IN · M1'],
       ['octatrack.MIDIOUT','audio4c.DININ1','midi','OT MIDI OUT → DIN IN · M2'],
       ['octatrack.MIDITHRU','hydra.MIDIIN','midi','OT THRU → Hydra MIDI IN · M3'],
@@ -178,7 +185,7 @@
       BOXES.forEach(b=>{if(state.enabled[b.id]===false||!active.has(b.id))return;const r=el('rect',{class:'gbox',x:b.x,y:b.y,width:b.w,height:b.h,rx:10});const t=el('text',{class:'glabel',x:b.x+b.w/2,y:b.y+18,'text-anchor':'middle'});t.textContent=b.label;[r,t].forEach(elm=>{elm.addEventListener('pointerenter',()=>{if(!state.drag&&!state.lock){state.focus=b.id;paint();}});elm.addEventListener('pointerleave',()=>{if(!state.drag&&!state.lock){state.focus=null;paint();}});elm.addEventListener('pointerdown',ev=>startDrag(ev,b.id));});svg.appendChild(r);svg.appendChild(t);boxEls[b.id]={r,t};});
       const cnt={},idx={};
       vis.forEach(e=>{const k=[e[0],e[1]].slice().sort().join('|');cnt[k]=(cnt[k]||0)+1;});
-      vis.forEach(e=>{const k=[e[0],e[1]].slice().sort().join('|');const i=(idx[k]=(idx[k]||0)+1)-1;const off=cnt[k]>1?(i-(cnt[k]-1)/2)*22:0;const p=el('path',{class:'edge '+e[2]+(e[4]==='TS'?' unbal':''),d:path(e[0],e[1],off)});svg.appendChild(p);edgeEls.push({el:p,a:e[0],b:e[1],kind:e[2],label:e[3],off,conn:e[4]});});
+      vis.forEach(e=>{const k=[e[0],e[1]].slice().sort().join('|');const i=(idx[k]=(idx[k]||0)+1)-1;const off=cnt[k]>1?(i-(cnt[k]-1)/2)*22:0;const p=el('path',{class:'edge '+e[2]+(e[4]==='TS'||e[4]==='RCA'?' unbal':'')+(e[4]==='SPK'?' spk':''),d:path(e[0],e[1],off)});svg.appendChild(p);edgeEls.push({el:p,a:e[0],b:e[1],kind:e[2],label:e[3],off,conn:e[4]});});
       Object.keys(DEV).forEach(id=>{
         if(!en(id)||!active.has(grp(id)))return;
         const d=DEV[id],sm=!!d.small,w=sm?52:144,h=sm?22:44,g=el('g',{class:'node'+(sm?' sm':'')+(d.norm?' n-'+d.norm:''),'data-id':id,transform:`translate(${d.x},${d.y})`});
@@ -191,7 +198,7 @@
         g.addEventListener('pointerdown',ev=>startDrag(ev,id));
         svg.appendChild(g);nodeEls[id]=g;
       });
-      buildControls();paint();
+      buildControls();buildLayers();paint();
     }
     function shade(kind,i){
       const P={audio:[214,22,52,90,44,80],midi:[28,18,60,92,46,74],usb:[158,20,48,84,44,76]}[kind]||[214,22,52,90,44,80];
@@ -220,7 +227,8 @@
     function endDrag(){const D=state.drag;state.drag=null;window.removeEventListener('pointermove',onMove);window.removeEventListener('pointerup',endDrag);if(D&&!D.moved){if(state.lock===D.id0){state.lock=null;state.focus=null;}else{state.lock=D.id0;state.focus=D.id0;}paint();}}
     function buildLayers(){
       modes.innerHTML='';const C={audio:'#3a7de8',midi:'#e8833a',usb:'#4ad29a'};
-      ['audio','midi','usb'].forEach(k=>{const b=document.createElement('button');b.textContent=k.toUpperCase();b.className=state.layers[k]===false?'off':'';b.style.background=C[k];b.style.color='#0b0d11';b.style.borderColor=C[k];b.onclick=()=>{state.layers[k]=state.layers[k]===false?true:false;buildLayers();build();};modes.appendChild(b);});
+      const cnt={audio:0,midi:0,usb:0};EDGES.forEach(e=>{if(en(e[0])&&en(e[1]))cnt[e[2]]++;});
+      ['audio','midi','usb'].forEach(k=>{const b=document.createElement('button');b.textContent=k.toUpperCase()+' ('+cnt[k]+')';b.className=state.layers[k]===false?'off':'';b.style.background=C[k];b.style.color='#0b0d11';b.style.borderColor=C[k];b.onclick=()=>{state.layers[k]=state.layers[k]===false?true:false;buildLayers();build();};modes.appendChild(b);});
     }
     buildLayers();build();
   })();
